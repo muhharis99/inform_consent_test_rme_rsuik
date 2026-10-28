@@ -1,0 +1,422 @@
+<?php
+// echo phpinfo(); die();
+require_once dirname(__FILE__) . '/mpdf/mpdf.php';
+$pdf = new mPDF('', 'A4S', 12, 'calibri', 15, 5, 35, 15, 5, 3, 'P');
+$pdf->SetTitle('FM/RM/16.X - '.$no_reg);
+$pdf->SetSubject('Asesmen Kemampuan dan Kemauan Belajar');
+$pdf->SetKeywords('RSU Islam Klaten, Asesmen Belajar');
+$pdf->SetHTMLHeader('
+  <table border="0" cellpadding="0" cellspacing="0" style="font-size:12px;" width="100%">
+    <tbody>
+      <tr>
+        <td align="left" width="300">RSU ISLAM KLATEN</td>
+        <td align="right" width="300" style="text-align:right;"> <b>FM/RM/16.3</b></td>
+        <td align="right"  style="">Hal {PAGENO}/ {nbpg}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table border="0" cellpadding="0" cellspacing="0" style="line-height:12px;" width="100%">
+    <tbody>
+      <tr><td colspan="6" style="line-height:5px;"> &nbsp; </td></tr>
+      <tr>
+        <td class="txr" rowspan="5" width="75" bgcolor="" style=""> </td>
+        <td width="" class="txc" rowspan="5" style="text-align:center; vertical-align:middle; font-size:16px; line-height:18px; " ><b>ASESMEN <br />KEMAMPUAN DAN KEMAUAN BELAJAR <br />PASIEN DAN KELUARGA</b></td>
+        <td class="" rowspan="5" width="5"></td><td width="70">NO.RM</td><td width="10">:</td><td width="250">'.(!empty($belajar->registered)?$no_reg:'').'</td>
+      </tr>
+      <tr><td>NAMA</td><td>:</td><td>'.(!empty($ranap->registered)?$nama:'').'</td></tr>
+      <tr><td>NIK</td><td>:</td><td>'.(!empty($ranap->registered)?$nik:'').'</td></tr>
+      <tr><td>TGL LAHIR</td><td>:</td><td>'.((!empty($ranap->registered) && $tgl_lahir != '') ? date("d-m-Y", strtotime($tgl_lahir)).' ('.$umur.')' : '').'</td></tr>
+      <tr><td valign="top">ALAMAT</td><td valign="top">:</td><td>'.(!empty($ranap->registered)?$alamat:' <br /> &nbsp; ').'</td></tr>
+      <tr><td colspan="6" style="line-height:3px; border-bottom:1px solid black;"> &nbsp; </td></tr>
+    </tbody>
+  </table>
+');
+$pdf->SetHTMLFooter('
+  <table style="font-size:12px;" width="100%"><tbody><tr><td width="350">Revisi: 4</td><td width="" align="right">Tanggal Terbit : 1 Agustus 2016</td></tr></tbody></table>
+');
+
+$pdf->SetFont('calibri', 13);
+$html = '';
+$html .= '
+  <style type="text/css">
+    .bg-burem {
+      background-color: #bebebe;
+      line-height:20px;
+    }
+    .bg-burem td {
+      line-height:20px;
+    }
+    .b td {
+        font-weight:bold;
+    }
+    .bg-burem1 {
+      background-color: rgb(245, 245, 245);
+      line-height:20px;
+    }
+    .bg-white {
+      background-color: #ffffff;
+    }
+    table {
+      width:100%;
+      font-size:14px;
+    }
+    .txr {
+      text-align:right;
+    }
+    .txl {
+      text-align:left;
+    }
+    .txj {
+      text-align:justify;
+    }
+    .txc {
+      text-align:center;
+    }
+    td {
+      text-align:left;
+      vertical-align:top;
+      padding:0 3px 0 3px;
+    }
+    .b {
+      font-weight:bold;
+    }
+    .ln5 {
+      line-height:5px;
+    }
+    .ln23 {
+      line-height:23px;
+    }
+    .bdl {
+       border-left: 0.5px solid black;
+    }
+    .bdr {
+       border-right: 0.5px solid black;
+    }
+    .bdt {
+       border-top: 0.5px solid black;
+    }
+    .bdb {
+       border-bottom: 0.5px solid black;
+    }
+  </style>
+'; 
+
+$html .= '
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+      <tr class="bg-burem b">
+        <td width="20"> A.</td>
+        <td colspan="4">Keyakinan dan nilai-nilai pasien dan keluarga</td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td colspan="4">Adakah hal-hal yang berkaitan dengan keyakinan anda yang perlu kami ketahui? </td>
+      </tr>
+      <tr class="">
+        <td width="20"> </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->keyakinan == '0')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td width="" colspan="3">Tidak ada </td>
+      </tr>
+      <tr class="">
+        <td width="20"> </td>
+        <td width="15"><img src="'.IMG.'banner/square14_uncheck.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td width="170">Ada, bila ada sebutkan : </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->keyakinan == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td width="">Tidak memakan suatu jenis makanan tertentu, misal daging sapi, ikan tidak <br />bersisik, dll </td>
+      </tr>
+      <tr class="">
+        <td colspan="3"> </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->keyakinan == '2')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Menolak dilayani petugas yang tidak sesuai dengan jenis kelamin </td>
+      </tr>
+      <tr class="">
+        <td colspan="3"> </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->keyakinan == '3')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Menolak diberikan imunisasi pada anaknya </td>
+      </tr>
+      <tr class="">
+        <td colspan="3"> </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->keyakinan == '4')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>'.(($belajar->keyakinan == '4')?$belajar->keyakinan_lain:'Lainnya : ____________________________________________________________').' </td>
+      </tr>
+      <tr class="">
+          <td width="" class="ln5" colspan="5"> &nbsp; </td>
+      </tr>
+    </tbody>
+  </table>'; 
+$html .= '
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+      <tr class="bg-burem b">
+        <td width="20"> B.</td>
+        <td colspan="10">Kemampuan membaca, tingkat pendidikan dan bahasa yang digunakan</td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td width="170">Bicara </td>
+        <td width="18" class="txl">: </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->bicara == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td width="100">Bicara normal </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->bicara == '2')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td width="90">Tuna wicara </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->bicara == '3')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td width="110">Gangguan bicara </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->bicara == '4')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td class="txj">'.(($belajar->bicara == '4')?$belajar->bicara_lain:'Lainnya : ___________').' </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td>Tingkat pendidikan </td>
+        <td>: </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->buta_huruf == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Buta huruf </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->buta_huruf == '0')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td colspan="5">Tidak buta huruf </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td>Bahasa </td>
+        <td>: </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->bahasa == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Indonesia </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->bahasa == '3')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Daerah </td>
+        <td colspan="4">: _______________________ </td>
+      </tr>
+      <tr>
+        <td colspan="3"> </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->bahasa == '2')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Inggris </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->bahasa == '4')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Lainnya </td>
+        <td colspan="4">: '.($belajar->bahasa == '4' && $belajar->bahasa_lain != ''?$belajar->bahasa_lain:'_______________________').' </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td>Dibutuhkan penerjemah </td>
+        <td>: </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->penerjemah == '0')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Tidak </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->penerjemah == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Ya, bahasa </td>
+        <td colspan="4">: '.($belajar->penerjemah == '1' && $belajar->penerjemah_lain != ''?$belajar->penerjemah_lain:'_______________________').' </td>
+      </tr>
+      <tr class="">
+          <td width="" class="ln5" colspan="11"> &nbsp; </td>
+      </tr>
+    </tbody>
+  </table>'; 
+$html .= '
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+      <tr class="bg-burem b">
+        <td width="20"> C.</td>
+        <td colspan="6">Hambatan emosional dan motivasi</td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td width="288">Menerima kondisi penyakit </td>
+        <td width="18" class="txl">: </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->kondisi == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td width="50">Ya </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->kondisi == '0')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td width="">Tidak </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td>Memiliki motivasi untuk sembuh </td>
+        <td>: </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->sembuh == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Ya </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->sembuh == '0')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Tidak </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td>Mampu bersikap koperatif dengan petugas </td>
+        <td>: </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->kooperatif == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Ya </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->kooperatif == '0')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Tidak </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td>Takut terhadap lingkungan RS </td>
+        <td>: </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->lingkungan == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Ya </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->lingkungan == '0')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Tidak </td>
+      </tr>
+      <tr class="">
+          <td width="" class="ln5" colspan="5"> &nbsp; </td>
+      </tr>
+    </tbody>
+  </table>'; 
+
+$html .= '
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+      <tr class="bg-burem b">
+        <td width="20"> D.</td>
+        <td colspan="10">Keterbatasan fisik dan kognitif</td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td width="170">Fisik </td>
+        <td width="18" class="txl">: </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->fisik == '0')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td width="100">Tidak ada </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->fisik == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td width="90">Tuna netra </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->fisik == '2')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td width="110">Tuna wicara </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->fisik == '3')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Tuna rungu </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td>Alat bantu khusus </td>
+        <td class="txl">: </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->alat_bantu == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Kursi roda </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->alat_bantu == '2')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Kruk </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->alat_bantu == '3')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Brankar </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->alat_bantu == '4')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td class="txj">'.(($belajar->alat_bantu == '4')?$belajar->alat_bantu_lain:'Lainnya : ___________').' </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td>Kognitif </td>
+        <td class="txl">: </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->kooperatif == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Kooperatif </td>
+        <td><img src="'.IMG.'banner/'.(($belajar->kooperatif == '0')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td colspan="5">Tidak kooperatif </td>
+      </tr>
+      <tr class="">
+          <td width="" class="ln5" colspan="11"> &nbsp; </td>
+      </tr>
+    </tbody>
+  </table>
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+      <tr class="bg-burem b">
+        <td width="20"> E.</td>
+        <td colspan="4">Kesediaan pasien untuk menerima informasi </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->informasi == '1')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td width="170">Bersedia </td>
+        <td width="15"><img src="'.IMG.'banner/'.(($belajar->informasi == '0')?'square14_check':'square14_uncheck').'.png" style="margin-top:2px;" width="12" height=""/> </td>
+        <td>Tidak bersedia </td>
+      </tr>
+      <tr>
+          <td class="ln5" colspan="5"> &nbsp; <br /><br /><br /></td>
+      </tr>
+    </tbody>
+  </table>'; 
+
+$html .= '
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td colspan="3"> &nbsp; </td>
+        </tr>
+        <tr>
+            <td colspan="3"> &nbsp; </td>
+        </tr>
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td class="txc" >
+              Klaten , '.(!empty($belajar->registered)?date('d-m-Y', strtotime($belajar->registered)):'___/___/_______ ').' Jam : '.(!empty($belajar->registered)?date('H:i:s', strtotime($belajar->registered)):'___/___ ').' WIB
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"> &nbsp; </td>
+        </tr>
+        <tr>
+            <td width="300" class="txc" style="background-image:url(\''.IMG.'ttd/'.$dpjp_id.'.jpg\'); display:none; background-repeat:no-repeat; background-size:100px; background-position:center;height:110px;">
+                Dokter Penanggung Jawab Pelayanan (DPJP)
+                <br />
+                <!--'.(!empty($dpjp_id)?'<img height="50" width="75" src="'.IMG.'ttd/'.$dpjp_id.'.jpg" alt="">':'').'-->
+                <br />
+                <br />
+                <br />
+                '.(!empty($belajar->pasien_keluarga)?'( '.$belajar->pasien_keluarga.' )':'( __________________________________ )').'
+            </td>
+            <td width="72"></td>
+            <td width="300" class="txc" style="background-image:url(\''.IMG.'ttd/'.$perawat_id.'.jpg\'); display:none; background-repeat:no-repeat; background-size:25% 25%; background-position:center;height:110px;">
+                Perawat yang mengkaji
+                <br />
+                <!--'.($ttd=='1'?'<img height="50" width="75" src="'.IMG.'ttd/'.$perawat_id.'.jpg" alt="">':'<br /><br />').'-->
+                <br />
+                <br />
+                <br />
+                '.(!empty($belajar->nama_petugas)?'( '.$belajar->nama_petugas.' )':'( __________________________________ )').'
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"> &nbsp; </td>
+        </tr>
+        <tr>
+            <td colspan="3"> &nbsp; </td>
+        </tr>
+        <tr>
+            <td colspan="3"> &nbsp; </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="font-size:11px;">Catatan: 
+            <br />Beri tanda checklist ( <img src="'.IMG.'banner/blank_check.png" style="margin-top:2px;" width="12" height=""/>) pada kotak ( <img src="'.IMG.'banner/square14_uncheck.png" style="margin-top:2px;" width="12" height=""/>) yang dipilih/sesuai</td>
+        </tr>
+    </tbody>
+  </table>'; 
+/*
+$html .= '
+  <div style="background-image:url(\''.IMG.'ttd/'.$no_reg.'.jpg\'); display:none; background-repeat:no-repeat; background-size:350px; height:100px;">
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>';
+$html .= '
+      <tr>
+        <td width="300" class="" style="" >Dokter pemeriksa 
+        <br />
+        <br />
+        <br />
+        '.(!empty($no_reg)?$dokter:'_____________________________________').'
+        </td>
+        <td class=""></td>
+      </tr>';
+$html .= '
+    </tbody>
+  </table>
+  </div>
+  '; 
+*/
+$pdf->WriteHTML($html);
+
+
+$file = "general_consent.pdf";
+if($pdf_type == 'F') {
+  $ip = getenv('HTTP_CLIENT_IP')?:
+  getenv('HTTP_X_FORWARDED_FOR')?:
+  getenv('HTTP_X_FORWARDED')?:
+  getenv('HTTP_FORWARDED_FOR')?:
+  getenv('HTTP_FORWARDED')?:
+  getenv('REMOTE_ADDR');
+  
+  if($ip == '::1') $ip = '127.0.0.1';
+
+  $dir = FCPATH."assets/rme/pdf/$ip/";
+  if(file_exists($dir)){
+  }else{
+      mkdir($dir,0777);
+  }
+  $file = $dir."general_consent.pdf";
+}
+$pdf->Output($file, $pdf_type);
+?>

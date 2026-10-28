@@ -1,0 +1,808 @@
+<?php 
+
+$this->load->model('pasien');
+$this->load->model('Antri');
+$this->load->model('Kunjung');
+$this->load->model('Mutasi_ri');
+$this->load->model('Respon_time_admisi');
+$this->load->model('Rsiklaten_inap');
+$this->load->model('New_pasien');
+$akses  = self::akses_menu();
+$writer = $akses->userid;
+$user   = $akses->nik;
+$status = false;
+$id_kunjung         = $this->input->post('id_kunjung');
+$no_reg             = $this->input->post('no_reg');
+$nama               = $this->input->post('nama');
+$alamat             = $this->input->post('alamat');
+$tgl_lahir          = substr($this->input->post('tgl_lahir'), 6, 4)."-".substr($this->input->post('tgl_lahir'), 3, 2)."-".substr($this->input->post('tgl_lahir'), 0, 2);
+$umur               = $this->input->post('umur');
+$ktp                = $this->input->post('ktp');
+$jenis_kelamin      = $this->input->post('jenis_kelamin');
+$telp_1              = $this->input->post('telp_1');
+$telp_2              = $this->input->post('telp_2');
+$kode_agama          = $this->input->post('agama');
+$kode_perkawinan          = $this->input->post('kawin');
+$kode_kerja          = $this->input->post('kode_kerja');
+$status_bayi          = $this->input->post('status_bayi');
+$tgl_masuk           = substr($this->input->post('tgl_periksa'), 6, 4)."-".substr($this->input->post('tgl_periksa'), 3, 2)."-".substr($this->input->post('tgl_periksa'), 0, 2);
+$jam_masuk           = $this->input->post('jam_periksa');
+$kode_asuransi       = $this->input->post('kode_asuransi');
+$kode_poli           = $this->input->post('kode_poli');
+$kode_dokter         = $this->input->post('kode_dokter');
+$tgl_dirawat         = substr($this->input->post('tgl_dirawat'), 6, 4)."-".substr($this->input->post('tgl_dirawat'), 3, 2)."-".substr($this->input->post('tgl_dirawat'), 0, 2);
+$jam_dirawat         = $this->input->post('jam_dirawat');
+$tgl_mulai_admisi    = substr($this->input->post('tgl_mulai_admisi'), 6, 4)."-".substr($this->input->post('tgl_mulai_admisi'), 3, 2)."-".substr($this->input->post('tgl_mulai_admisi'), 0, 2)." ".substr($this->input->post('tgl_mulai_admisi'), 11, 8);
+$kode_bangsal        = $this->input->post('kode_bangsal');
+$no_bed              = $this->input->post('no_bed');
+$tgl_selesai_admisi  = substr($this->input->post('tgl_selesai_admisi'), 6, 4)."-".substr($this->input->post('tgl_selesai_admisi'), 3, 2)."-".substr($this->input->post('tgl_selesai_admisi'), 0, 2)." ".substr($this->input->post('tgl_selesai_admisi'), 11, 8);
+$kode_asuransi_ri    = $this->input->post('kode_asuransi_ri');
+$hak_kelas           = $this->input->post('hak_kelas');
+$kelas_perawatan     = $this->input->post('kelas_perawatan');
+$cara_daftar         = $this->input->post('cara_daftar');
+$praktek_rsi         = $this->input->post('praktek_rsi');
+$kode_dokter_perujuk = $this->input->post('kode_dokter_perujuk');
+$nama_perujuk        = $this->input->post('nama_perujuk');
+$alamat_perujuk      = $this->input->post('alamat_perujuk');
+$dpjp_1              = $this->input->post('dpjp_1');
+$dpjp_2              = $this->input->post('dpjp_2');
+$dpjp_3              = $this->input->post('dpjp_3');
+$dpjp_4              = $this->input->post('dpjp_4');
+$dpjp_5              = $this->input->post('dpjp_5');
+$nama_penanggung_jawab           = $this->input->post('nama_penanggung_jawab');
+$alamat_penanggung_jawab         = $this->input->post('alamat_penanggung_jawab');
+$tgl_lahir_penanggung_jawab      = substr($this->input->post('tgl_lahir_penanggung_jawab'), 6, 4)."-".substr($this->input->post('tgl_lahir_penanggung_jawab'), 3, 2)."-".substr($this->input->post('tgl_lahir_penanggung_jawab'), 0, 2);
+$jenis_kelamin_penanggung_jawab  = $this->input->post('jenis_kelamin_penanggung_jawab');
+$no_ktp_penanggung_jawab         = $this->input->post('no_ktp_penanggung_jawab');
+$no_telp_penanggung_jawab        = $this->input->post('no_telp_penanggung_jawab');
+$pekerjaan_penanggung_jawab      = $this->input->post('pekerjaan_penanggung_jawab');
+$pekerjaan_penanggung_jawab_lain = $this->input->post('pekerjaan_penanggung_jawab_lain');
+$hub_penanggung_jawab            = $this->input->post('hub_penanggung_jawab');
+$nama_darurat_1       = $this->input->post('nama_darurat_1');
+$alamat_darurat_1     = $this->input->post('alamat_darurat_1');
+$umur_darurat_1       = $this->input->post('umur_darurat_1');
+$telp_darurat_1       = $this->input->post('telp_darurat_1');
+$hub_darurat_1        = $this->input->post('hub_darurat_1');
+$nama_darurat_2       = $this->input->post('nama_darurat_2');
+$alamat_darurat_2     = $this->input->post('alamat_darurat_2');
+$umur_darurat_2       = $this->input->post('umur_darurat_2');
+$telp_darurat_2       = $this->input->post('telp_darurat_2');
+$hub_darurat_2        = $this->input->post('hub_darurat_2');
+$nama_darurat_3       = $this->input->post('nama_darurat_3');
+$alamat_darurat_3     = $this->input->post('alamat_darurat_3');
+$umur_darurat_3       = $this->input->post('umur_darurat_3');
+$telp_darurat_3       = $this->input->post('telp_darurat_3');
+$hub_darurat_3        = $this->input->post('hub_darurat_3');
+$registered           = date("Y-m-d H:i:s");
+// pre($tgl_mulai_admisi);
+
+if (empty($no_reg)||$no_reg=='') die('c');
+
+if (!empty($status_bayi)&&$status_bayi!="") {
+    /** kasus bayi baru lahir didaftarkan sebelum ibunya lahir, tgl masuk dan jam masuk disesuaikan dengan tgl mulai rawat inap (kunjung, inap, mutasi_ri) */
+    /** kapan rm di entri */
+    $ibu_anak = DB::table('rsiklaten.ibu_anak')->where('id', $status_bayi)->first();
+    if (!empty($ibu_anak['submitted'])) {
+        $old_kunjung = DB::table('rsiklaten.kunjung')->where('no_reg', $no_reg)->whereRaw("registered between date_add('".$ibu_anak['submitted']."', interval -1 hour) and date_add('".$ibu_anak['submitted']."', interval 1 hour)")->orderBy('id', 'asc')->first();
+        $old_tgl_masuk = !empty($old_kunjung['tanggal']) ? $old_kunjung['tanggal'] : null;
+        if (!empty($old_tgl_masuk)) {
+            DB::table('rsiklaten.kunjung')->where('no_reg', $no_reg)->where('tanggal', $old_tgl_masuk)->whereNotNull('kunjung')
+                ->update([
+                    'tanggal' => $tgl_masuk,
+                    'jam'     => $jam_masuk,
+                ]);
+            DB::table('rsiklaten.mutasi_ri')->where('no_reg', $no_reg)->where('tgl_masuk', $old_tgl_masuk)->whereNotNull('tgl_ri')->whereNull('deleted')
+                ->update([
+                    'tgl_masuk' => $tgl_masuk, 
+                    'jam_masuk' => $jam_masuk,
+                ]);
+            DB::table('rsiklaten.inap')->where('no_reg', $no_reg)->where('tgl_masuk', $old_tgl_masuk)
+                ->update([
+                    'tgl_masuk' => $tgl_masuk, 
+                    'jam_masuk' => $jam_masuk,
+                ]);
+        }
+    }
+}
+// if (ipclient()==IPC) json($status_bayi);
+// if (ipclient()==IPC) die();
+/* cari kode kelas bangsal */ 
+$bangsal = DB::table('rme.bangsal as a')->where('kd_bangsal', $kode_bangsal)->first(array('kd_kelas'));
+$kode_kelas_bangsal = $kelas_perawatan;
+$perujuk_nama       = $nama_perujuk;
+$perujuk_alamat     = $alamat_perujuk;
+$asal               = '';
+$kd_dr              = '';
+$kode_poli_dpjp     = "";
+$kode_rujuk         = $cara_daftar;
+// pre($bangsal);
+if (!empty($bangsal)) {
+    $bangsal = (object) $bangsal;
+    $kode_kelas_bangsal = $bangsal->kd_kelas;
+    if ($hak_kelas == "I" && in_array($kode_asuransi, ['303'])) $kode_kelas_bangsal = "I";
+}
+/* cari asal kunjungan */ 
+if ((string) $id_kunjung != "") {
+    $kunjung = DB::table('rsiklaten.kunjung as a')->where('id', $id_kunjung)->first();
+    if (!empty($kunjung)) {
+        $kunjung        = (object) $kunjung;
+        $asal           = $kunjung->kd_poli;
+        $kd_dr          = $kunjung->kd_dr;
+        $tgl_masuk      = $kunjung->tanggal;
+        $jam_masuk      = $kunjung->jam;
+        $kode_poli_dpjp = $kunjung->kd_poli;
+        $kode_rujuk     = $kunjung->rujuk;
+        $perujuk = DB::table('rsiklaten.perujuk as a')
+                        ->where('a.no_reg', $no_reg)
+                        ->where('a.tgl_masuk', $tgl_masuk)
+                        ->first(
+                            array(DB::raw('a.nama as perujuk'), 'a.alamat')
+                        );
+        if (!empty($perujuk)) {
+            $perujuk = (object) $perujuk;
+            $perujuk_nama = $perujuk->perujuk;
+            $perujuk_alamat = $perujuk->alamat;
+        }
+        /*
+        DB::table('rme.askep_gd')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)->where('jam_masuk', $jam_masuk)
+            ->update(array(
+                'tgl_masuk' => $tgl_dirawat, 
+                'jam_masuk' => $jam_dirawat
+            ));
+        */
+    } 
+} else {
+    $poli_dpjp = DB::table('rme.dokter as a')
+        ->leftJoin('rsiklaten.poli as b', function ($join) {
+            $join->on('a.kd_poli', '=', 'b.kode_poli');
+        })
+        ->where('a.kd_dokter', $dpjp_1)
+        ->where('b.report_status', 1)
+        ->where('b.report_nama', '!=', 'EKSEKUTIF')
+        ->whereNotIn('a.kd_poli', array('ODC', 'GCU'))
+        ->first(array('a.kd_poli'));
+    if (!empty($poli_dpjp)) {
+        $poli_dpjp = (object) $poli_dpjp;
+        $kode_poli_dpjp = $poli_dpjp->kd_poli;
+    }
+    /** simpan di database 14 */
+    /** MULAI SIMPAN DATABASE 14  */
+        $str_umur = strtoupper(str_replace(["/", " ", ", HAPPY BIRTHDAY", ",HAPPYBIRTHDAY"], "", $umur));
+        $byl_umur = $umur;
+        if (strpos($str_umur, ',') === false) {
+            $byl_umur = (strpos($str_umur, 'TH') === false ? '0' : stristr($str_umur, 'TH', true)).".".(strpos($str_umur, 'BL') === false ? '0' : (strpos($str_umur, 'TH') === false ? stristr($str_umur, 'BL', true) : str_replace("TH", "", stristr(stristr($str_umur, 'TH'), 'BL', true)))).".".(strpos($str_umur, 'HR') === false ? '0' : str_replace(["TH", "BL"], "", stristr(stristr(stristr($str_umur, 'TH'), 'BL'), 'HR', true)));
+        } else { 
+            if (strpos($str_umur, 'TH, HAPPY BIRTHDAY')) {
+                $byl_umur = stristr($str_umur, ',', true).str_replace(",", ".", stristr(stristr($str_umur, ','), 'TH, HAPPY BIRTHDAY', true)).".0";
+            } else if (strpos($str_umur, 'TH')) {
+                $byl_umur = stristr($str_umur, ',', true).str_replace(",", ".", stristr(stristr($str_umur, ','), 'TH', true)).".0";
+            } else if (strpos($str_umur, 'BL')) {
+                $byl_umur = "0.".stristr($str_umur, ',', true).str_replace(",", ".", stristr(stristr($str_umur, ','), 'BL', true));
+            }
+        }
+        $master_asuransi = DB::connection('rsi_byl')->table('master_asuransi')->where('asuransi_kode', $kode_asuransi_ri)->first(['asuransi_id']);
+        DB::connection('rsi_byl')->table('kunjung')->insert([
+            "status_inden" => "TIDAK",
+            "no_rm" => $no_reg,
+            "umur" => $byl_umur,
+            "tgl_masuk" => $tgl_dirawat,
+            "jam_masuk" => $jam_dirawat,
+            "antrian" => "1A000",
+            "antrian_status" => "Belum",
+            "poli_kd" => $kode_poli_dpjp,
+            "dokter_kd" => $dpjp_1,
+            "asuransi_id" => !empty($master_asuransi['asuransi_id'])?$master_asuransi['asuransi_id']:NULL,
+            "jenis_kunjung" => "Lama",
+            "kunjung_ke" => 0,
+            "sts_inap" => 1,
+            "sts_bill_rajal" => 0,
+            "sts_pasien_resep" => 0,
+            "sts_pasien_resep_inap" => 0,
+            "sts_pasien_apd" => 0,
+            "sts_jenazah" => 0,
+            "sts_laborat" => 0,
+            "sts_radiologi" => 0,
+            "sts_bayar" => "Belum",
+            "pulang" => 0,
+            "tgl_pulang" => NULL,
+            "jam_pulang" => NULL,
+            "akuntan_kd" => 1,
+            "sts_bayi_lahir" => 0,
+            "deleted" => 0,
+            "bpjs_antrian_send" => 0
+        ]);
+    /** SELESAI SIMPAN DATABASE 14 */
+
+    $kunjung            = Kunjung::firstOrNew(array('no_reg' => $no_reg, 'tanggal' => $tgl_dirawat, 'jam' => $jam_dirawat));
+    $kunjung->tanggal   = $tgl_dirawat;
+    $kunjung->jam       = $jam_dirawat;
+    $kunjung->no_kjg    = 1;
+    $kunjung->rawat     = "I";
+    $kunjung->no_reg    = $no_reg;
+    $kunjung->kunjung   = "L";
+    $kunjung->kd_poli   = $kode_poli_dpjp;
+    $kunjung->kd_dr     = $dpjp_1;
+    $kunjung->kd_dr_ri1 = $dpjp_1;
+    $kunjung->kd_dr_ri2 = $dpjp_2;
+    $kunjung->kd_dr_ri3 = $dpjp_3;
+    $kunjung->umur      = $umur;
+    $kunjung->rujuk     = $kode_rujuk;
+    $kunjung->pasien    = $kode_asuransi_ri;
+    $kunjung->opr       = $user;
+    DB::transaction(function () use ($kunjung) {
+        $kunjung->save();
+    });
+    $tgl_masuk = $tgl_dirawat;
+    $jam_masuk = $jam_dirawat;
+
+}
+// pre($tgl_masuk);
+/* cari data di mutasi ri */ 
+$mutasi_ri = Mutasi_ri::where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)->whereNull('deleted')->first();
+if (!empty($mutasi_ri)) {
+    /* backup data */ 
+    savelog($no_reg, "rsiklaten", "mutasi_ri", $mutasi_ri, $writer);
+}
+
+
+DB::table('rsiklaten.mutasi_ri')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)
+        ->update(array(
+            'deleted' => $registered, 
+            'deletedby' => $user, 
+            'deletedstate' => 1
+        ));
+
+$mutasi_ri = Mutasi_ri::firstOrNew(array('no_reg' => $no_reg, 'tgl_masuk' => $tgl_masuk, 'bangsal' => $kode_bangsal));
+$mutasi_ri->id_kunjung            = $id_kunjung;
+$mutasi_ri->tanggal               = $tgl_masuk.' '.$jam_masuk;
+$mutasi_ri->tgl_masuk             = $tgl_masuk;
+$mutasi_ri->jam_masuk             = $jam_masuk;
+$mutasi_ri->no_reg                = $no_reg;
+$mutasi_ri->ruang                 = $no_bed;
+$mutasi_ri->bangsal               = $kode_bangsal;
+$mutasi_ri->kelas                 = $hak_kelas;
+$mutasi_ri->kelas_perawatan       = $kelas_perawatan;
+$mutasi_ri->no_bed                = $no_bed;
+$mutasi_ri->asal                  = $asal;
+$mutasi_ri->kd_dr                 = $kd_dr;
+$mutasi_ri->kd_dr_ri1             = $dpjp_1;
+$mutasi_ri->kd_dr_ri2             = $dpjp_2;
+$mutasi_ri->kd_dr_ri3             = $dpjp_3;
+$mutasi_ri->kd_dr_ri4             = $dpjp_4;
+$mutasi_ri->kd_dr_ri5             = $dpjp_5;
+$mutasi_ri->jenis_kel             = $jenis_kelamin;
+$mutasi_ri->asuransi              = $kode_asuransi_ri;
+$mutasi_ri->umur                  = $umur;
+$mutasi_ri->tgl_ri                = $tgl_dirawat;
+$mutasi_ri->jam_ri                = $jam_dirawat;
+$mutasi_ri->pjawab                = $nama_penanggung_jawab;
+$mutasi_ri->almjawab              = $alamat_penanggung_jawab;
+$mutasi_ri->hubjawab              = $hub_penanggung_jawab;
+$mutasi_ri->tgl_lahir_pjawab      = $tgl_lahir_penanggung_jawab;
+$mutasi_ri->jenis_kel_pjawab      = $jenis_kelamin_penanggung_jawab;
+$mutasi_ri->no_telp_pjawab        = $no_telp_penanggung_jawab;
+$mutasi_ri->no_ktp_pjawab         = $no_ktp_penanggung_jawab;
+if (!empty($pekerjaan_penanggung_jawab)) {
+    $mutasi_ri->pekerjaan_pjawab      = $pekerjaan_penanggung_jawab;
+}
+if (!empty($pekerjaan_penanggung_jawab_lain)) {
+    $mutasi_ri->pekerjaan_pjawab_lain = $pekerjaan_penanggung_jawab_lain;
+}
+$mutasi_ri->pjamin                = $nama_darurat_1;
+$mutasi_ri->almjamin              = $alamat_darurat_1;
+$mutasi_ri->no_telp_pjamin        = $telp_darurat_1;
+$mutasi_ri->nama_darurat_1        = $nama_darurat_1;
+$mutasi_ri->alamat_darurat_1      = $alamat_darurat_1;
+$mutasi_ri->umur_darurat_1        = $umur_darurat_1;
+$mutasi_ri->no_telp_darurat_1     = $telp_darurat_1;
+$mutasi_ri->hub_darurat_1         = $hub_darurat_1;
+$mutasi_ri->nama_darurat_2        = $nama_darurat_2;
+$mutasi_ri->alamat_darurat_2      = $alamat_darurat_2;
+$mutasi_ri->umur_darurat_2        = $umur_darurat_2;
+$mutasi_ri->no_telp_darurat_2     = $telp_darurat_2;
+$mutasi_ri->hub_darurat_2         = $hub_darurat_2;
+$mutasi_ri->nama_darurat_3        = $nama_darurat_3;
+$mutasi_ri->alamat_darurat_3      = $alamat_darurat_3;
+$mutasi_ri->umur_darurat_3        = $umur_darurat_3;
+$mutasi_ri->no_telp_darurat_3     = $telp_darurat_3;
+$mutasi_ri->hub_darurat_3         = $hub_darurat_3;
+$mutasi_ri->petugas               = $user;
+$mutasi_ri->registered            = $registered;
+$mutasi_ri->deletedstate          = 0;
+$mutasi_ri->deleted               = NULL;
+DB::transaction(function () use ($mutasi_ri) {
+    $mutasi_ri->save();
+});
+
+/* simpan respon time */
+$respon_time_admisi = Respon_time_admisi::where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)->where('jam_masuk', $jam_masuk)->first();
+if (!empty($respon_time_admisi)) {
+    savelog($no_reg, "rsik", "respon_time_admisi", $respon_time_admisi, $writer);
+}
+$respon_time_admisi = Respon_time_admisi::firstOrNew(array('no_reg' => $no_reg, 'tgl_masuk' => $tgl_masuk, 'jam_masuk' => $jam_masuk));
+$respon_time_admisi->tgl_masuk      = $tgl_masuk;
+$respon_time_admisi->jam_masuk      = $jam_masuk;
+$respon_time_admisi->no_reg         = $no_reg;
+$respon_time_admisi->tgl_ri         = $tgl_dirawat;
+$respon_time_admisi->jam_ri         = $jam_dirawat;
+$respon_time_admisi->mulai_admisi   = $tgl_mulai_admisi;
+$respon_time_admisi->selesai_admisi = $tgl_selesai_admisi;
+$respon_time_admisi->writed         = $registered;
+$respon_time_admisi->writer         = $writer;
+$respon_time_admisi->deleted        = NULL;
+DB::transaction(function () use ($respon_time_admisi) {
+    $respon_time_admisi->save();
+});
+/** update perujuk */
+switch ($kode_rujuk) {
+    case '' : 
+    case 1 : 
+    case '1' : 
+    case 0 : 
+        break;
+    default : 
+        DB::table('rsiklaten.perujuk')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)
+            ->update(array(
+                'deleted' => $registered, 
+                'deletedby' => $user, 
+                'deletedstate' => 1
+            ));
+        DB::table('rsiklaten.perujuk')
+            ->insert(array(
+                'id_kunjung' => $id_kunjung, 
+                'no_reg' => $no_reg, 
+                'tgl_masuk' => $tgl_masuk, 
+                'jam' => $jam_masuk, 
+                'rsi' => $praktek_rsi, 
+                'kd_dr' => $kode_dokter_perujuk, 
+                'nama' => $nama_perujuk, 
+                'alamat' => $alamat_perujuk
+            ));    
+        break;  
+}
+/* update data pasien */ 
+$pasien = Pasien::find($no_reg); 
+savelog($no_reg, "rsiklaten", "pasien", $pasien, $writer);
+$pasien->tgl_masuk        = $tgl_dirawat;
+$pasien->jam_masuk        = $jam_dirawat;
+$pasien->tgl_ri           = $tgl_dirawat;
+$pasien->jam_ri           = $jam_dirawat;
+$pasien->jenis_kel        = $jenis_kelamin;
+if (!empty($kode_agama)) $pasien->agama = $kode_agama;
+if (!empty($kode_perkawinan)) $pasien->kawin = $kode_perkawinan;
+$pasien->tgl_lahir        = $tgl_lahir;
+$pasien->umur             = $umur;
+$pasien->nama             = $nama;
+if (strlen($ktp) > 10) {
+    $pasien->no_id        = $ktp;
+}
+$pasien->alamat           = $alamat;
+$pasien->telp             = $telp_1;
+$pasien->telp2            = $telp_2;
+$pasien->kd_dr_ri1        = $dpjp_1;
+$pasien->kd_dr_ri2        = $dpjp_2;
+$pasien->rawat            = 'I';
+$pasien->kelas            = $kode_kelas_bangsal;
+$pasien->bangsal          = $kode_bangsal;
+$pasien->no_bed           = $no_bed;
+$pasien->pulang           = 0;
+$pasien->tgl_keluar       = NULL;
+$pasien->jam_keluar       = NULL;
+$pasien->umur             = $umur;
+$pasien->rujuk            = $kode_rujuk;
+$pasien->perujuk          = $perujuk_nama;
+$pasien->alamat_perujuk   = $perujuk_alamat;
+$pasien->pj               = $nama_penanggung_jawab;
+$pasien->alamat_pj        = $alamat_penanggung_jawab;
+$pasien->pjdarurat        = $nama_darurat_1;
+$pasien->alamat_pjdarurat = $alamat_darurat_1;
+$pasien->pasien           = $kode_asuransi_ri;
+$pasien->no_kp            = "MRS";
+DB::transaction(function () use ($pasien) {
+    $pasien->save();
+});
+/** update new pasien */
+$res_update = New_pasien::where('no_rm', $no_reg)->update([
+    "jenis_kelamin" => $jenis_kelamin,
+    "tgl_lahir" => $tgl_lahir,
+    "nama" => $nama
+]);
+/* get poliklinik sesuai DPJP */
+$poli_dpjp = DB::table('rme.dokter as a')
+    ->leftJoin('rsiklaten.poli as b', function ($join) {
+        $join->on('a.kd_poli', '=', 'b.kode_poli');
+    })
+    ->where('a.kd_dokter', $dpjp_1)
+    ->where('b.report_status', 1)
+    ->where('b.report_nama', '!=', 'EKSEKUTIF')
+    ->whereNotIn('a.kd_poli', array('ODC', 'GCU'))
+    ->first(array('a.kd_poli'));
+if (!empty($poli_dpjp)) {
+    $poli_dpjp = (object) $poli_dpjp;
+    $kode_poli_dpjp = $poli_dpjp->kd_poli;
+}
+/* update kunjung */
+if ((string) $id_kunjung != "") {
+    $kunjung = Kunjung::where('id', $id_kunjung); 
+// pre($kunjung);
+    savelog($no_reg, "rsiklaten", "kunjung", $kunjung, $writer);
+    DB::transaction(function () use ($kunjung, &$dpjp_1, &$dpjp_2, &$dpjp_3) {
+        $kunjung->update(array('kd_dr_ri1' => $dpjp_1, 'kd_dr_ri2' => $dpjp_2, 'kd_dr_ri3' => $dpjp_3, 'rawat' => 'G'));
+    });
+}
+/** simpan di dfrm/penyimpanan */
+/** get data lama */
+if (!empty($id_kunjung)) {
+    $dfrm = DB::table('rsiklaten.dfrm')->where('id_kunjung', $id_kunjung)->where('deletedstate', 0)->first();
+    savelog($no_reg, "rsiklaten", "dfrm", $dfrm, $writer);
+    if (!empty($dfrm)) {
+        $dfrm = (object) $dfrm;
+        $id_dfrm = $dfrm->id;
+        /** update data dfrm lama */
+        $status_baru = $dfrm->status_baru;
+        if (in_array($dfrm->kd_poli, ['UGD', 'PNEK'])) { $status_baru = 0; } else { $status_baru = 2; } 
+        DB::table('rsiklaten.dfrm')->where('id', $id_dfrm)
+        ->update([
+            'kd_dr' => $dpjp_1, 
+            'status_baru' => $status_baru
+        ]);
+    } else {
+        /** insert new record */
+        $kunjung = Kunjung::where('id', $id_kunjung)->first(['kd_poli']); 
+        DB::table('rsiklaten.dfrm')->insert(array(
+            'id_kunjung' => $id_kunjung,
+            'tanggal' => $tgl_dirawat,
+            'jam' => $jam_dirawat,
+            'no_reg' => $no_reg,
+            'nama' => $nama,
+            'kd_poli' => !empty($kunjung['kd_poli'])?$kunjung['kd_poli']:$kode_poli_dpjp,
+            'kd_dr' => $dpjp_1,
+            'status_baru' => 0
+        ));    
+
+    }
+} else {
+    /** insert new record */
+    DB::table('rsiklaten.dfrm')->insert(array(
+        'id_kunjung' => $id_kunjung,
+        'tanggal' => $tgl_dirawat,
+        'jam' => $jam_dirawat,
+        'no_reg' => $no_reg,
+        'nama' => $nama,
+        'kd_poli' => $kode_poli_dpjp,
+        'kd_dr' => $dpjp_1,
+        'status_baru' => 2
+    ));    
+}
+
+/* get nama petuga */
+$nama_petugas = ""; 
+$pihak_pertama_jabatan = "PELAKSANA ADMISI";
+$row_petugas = DB::table('dbfile.karya')->where('nik', $user)->first(array('nama')); 
+if (!empty($row_petugas)) {
+    $row_petugas = (object) $row_petugas; 
+    $nama_petugas = $row_petugas->nama;
+}
+/* simpan akad */
+$sekarang = date("Y-m-d"); 
+$str_table = ""; 
+switch ($kode_asuransi_ri) {
+    case '300' : 
+    case '301' : 
+    case '302' : 
+    case '303' : 
+    case '306' : 
+        /*
+        if ($tgl_dirawat!=$sekarang) {
+            $str_table = "rsik.cetak_akad_bpjs_mutasi";
+        } else {
+            */
+        if ($kelas_perawatan == 'MUTASI') {
+            $str_table = "rsik.cetak_akad_bpjs_mutasi";
+        } else {
+            if ($hak_kelas!=$kelas_perawatan) {
+                /* naik kelas */
+                $str_table = "rsik.cetak_akad_bpjs_".strtolower($kelas_perawatan);
+                if ($hak_kelas=='II' && $kelas_perawatan=='VIP') {
+                    $str_table = "rsik.cetak_akad_bpjs_ii_".strtolower($kelas_perawatan);
+                }
+            } else {
+                /* sesuai kelas */
+                $str_table = "rsik.cetak_akad_bpjs";
+            }
+        }
+        break; 
+    case '000' : 
+    case '001' :
+        $str_table = "rsik.cetak_akad_umum";
+        break; 
+    default : 
+        $str_table = "rsik.cetak_akad_asuransi";
+        break;
+}
+if ($str_table!="") {
+    /* get pekerjaan penanggung jawab */
+    $str_pekerjaan_penanggung_jawab = ""; 
+    $row_kerja = DB::table('rsiklaten.pekerjaan')->where('kd_pekerjaan', $pekerjaan_penanggung_jawab)->first(array('pekerjaan'));
+    if (!empty($row_kerja)) {
+        $row_kerja = (object) $row_kerja; 
+        $str_pekerjaan_penanggung_jawab = $row_kerja->pekerjaan; 
+    }
+    DB::table('rsik.cetak_akad_umum')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)->where('jam_masuk', $jam_masuk)
+    ->update(array(
+        'deleted' => $registered, 
+        'deleted_by' => $user, 
+        'deleted_state' => 1
+    ));
+    DB::table('rsik.cetak_akad_asuransi')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)->where('jam_masuk', $jam_masuk)
+    ->update(array(
+        'deleted' => $registered, 
+        'deleted_by' => $user, 
+        'deleted_state' => 1
+    ));
+    DB::table('rsik.cetak_akad_bpjs')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)->where('jam_masuk', $jam_masuk)
+    ->update(array(
+        'deleted' => $registered, 
+        'deleted_by' => $user, 
+        'deleted_state' => 1
+    ));
+    DB::table('rsik.cetak_akad_bpjs_i')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)->where('jam_masuk', $jam_masuk)
+    ->update(array(
+        'deleted' => $registered, 
+        'deleted_by' => $user, 
+        'deleted_state' => 1
+    ));
+    DB::table('rsik.cetak_akad_bpjs_ii')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)->where('jam_masuk', $jam_masuk)
+    ->update(array(
+        'deleted' => $registered, 
+        'deleted_by' => $user, 
+        'deleted_state' => 1
+    ));
+    DB::table('rsik.cetak_akad_bpjs_vip')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)->where('jam_masuk', $jam_masuk)
+    ->update(array(
+        'deleted' => $registered, 
+        'deleted_by' => $user, 
+        'deleted_state' => 1
+    ));
+    DB::table('rsik.cetak_akad_bpjs_ii_vip')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)->where('jam_masuk', $jam_masuk)
+    ->update(array(
+        'deleted' => $registered, 
+        'deleted_by' => $user, 
+        'deleted_state' => 1
+    ));
+    DB::table('rsik.cetak_akad_bpjs_vvip')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)->where('jam_masuk', $jam_masuk)
+    ->update(array(
+        'deleted' => $registered, 
+        'deleted_by' => $user, 
+        'deleted_state' => 1
+    ));
+    DB::table('rsik.cetak_akad_bpjs_mutasi')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk)->where('jam_masuk', $jam_masuk)
+    ->update(array(
+        'deleted' => $registered, 
+        'deleted_by' => $user, 
+        'deleted_state' => 1
+    ));
+    DB::table($str_table)
+    ->insert(array(
+        'no_reg' => $no_reg, 
+        'tgl_masuk' => $tgl_masuk, 
+        'jam_masuk' => $jam_masuk, 
+        'tgl_ri' => $tgl_dirawat, 
+        'jam_ri' => $jam_dirawat, 
+        'kd_bangsal' => $kode_bangsal, 
+        'tgl_dibuat' => date("Y-m-d"),
+        'jam_dibuat' => date("H:i:s"), 
+        'tgl_dicetak' => date("Y-m-d"),
+        'jam_dicetak' => date("H:i:s"), 
+        'pihak_pertama_nama' => $nama_petugas, 
+        'pihak_pertama_nik' => $user, 
+        'pihak_pertama_jabatan' => $pihak_pertama_jabatan, 
+        'pihak_kedua_nama' => $nama_penanggung_jawab, 
+        'pihak_kedua_alamat' => $alamat_penanggung_jawab, 
+        'pihak_kedua_nik' => $no_ktp_penanggung_jawab, 
+        'pihak_kedua_pekerjaan' => $str_pekerjaan_penanggung_jawab, 
+        'submitted' => date("Y-m-d H;i:s"), 
+        'submitted_by' => $user, 
+        'deleted_state' => 0
+    ));    
+}
+
+/* insert update rsiklaten.inap */
+$rsiklaten_inap = Rsiklaten_inap::where('no_reg', $no_reg)->first();
+if (!empty($rsiklaten_inap)) {
+    savelog($no_reg, "rsiklaten", "inap", $rsiklaten_inap, $writer);
+}
+$rsiklaten_inap = Rsiklaten_inap::firstOrNew(array('no_reg' => $no_reg));
+$rsiklaten_inap->nama      = $nama;
+$rsiklaten_inap->tgl_lahir  = $tgl_lahir;
+$rsiklaten_inap->tgl_masuk  = $tgl_masuk;
+$rsiklaten_inap->jam_masuk  = $jam_masuk;
+$rsiklaten_inap->no_reg     = $no_reg;
+$rsiklaten_inap->tgl_ri     = $tgl_dirawat;
+$rsiklaten_inap->jam_ri     = $jam_dirawat;
+$rsiklaten_inap->kd_poli    = $kode_poli_dpjp;
+$rsiklaten_inap->kd_dr      = $dpjp_1;
+$rsiklaten_inap->kd_dr_ri1  = $dpjp_1;
+$rsiklaten_inap->kd_dr_ri2  = $dpjp_2;
+$rsiklaten_inap->kd_dr_ri3  = $dpjp_3;
+$rsiklaten_inap->kelas      = $kode_kelas_bangsal;
+$rsiklaten_inap->bangsal    = $kode_bangsal;
+$rsiklaten_inap->no_bed     = $no_bed;
+$rsiklaten_inap->rujuk      = $kode_rujuk;
+$rsiklaten_inap->nmrujuk    = $perujuk_nama;
+$rsiklaten_inap->pasien     = $kode_asuransi_ri;
+$rsiklaten_inap->inapke     = 1;
+$rsiklaten_inap->tgl_keluar = NULL;
+$rsiklaten_inap->jam_keluar = NULL;
+$rsiklaten_inap->pjawab     = $nama_penanggung_jawab;
+$rsiklaten_inap->almjawab   = $alamat_penanggung_jawab;
+$rsiklaten_inap->hubjawab   = $hub_penanggung_jawab;
+$rsiklaten_inap->pjamin     = $nama_darurat_1;
+$rsiklaten_inap->almjamin   = $alamat_darurat_1;
+$rsiklaten_inap->hubjamin   = $hub_darurat_1;
+$rsiklaten_inap->kodebu     = $kelas_perawatan;
+$rsiklaten_inap->pulang     = 0;
+$rsiklaten_inap->statusplg  = NULL;
+$rsiklaten_inap->lunas      = NULL;
+$rsiklaten_inap->deleted    = NULL;
+DB::transaction(function () use ($rsiklaten_inap) {
+    $rsiklaten_inap->save();
+});
+
+$row_pasien = Pasien::find($no_reg);
+DB::table('ranap.inap')
+    ->insert(array(
+        'no_reg' => $no_reg, 
+        'nama' => $nama, 
+        'alamat' => $alamat, 
+        'kd_daerah' => $row_pasien->kd_daerah, 
+        'telp' => $row_pasien->telp, 
+        'jenis_kel' => $jenis_kelamin, 
+        'tgl_lahir' => $row_pasien->tgl_lahir, 
+        'tgl_masuk' => $tgl_masuk, 
+        'jam_masuk' => $jam_masuk, 
+        'tgl_ri' => $tgl_dirawat, 
+        'jam_ri' => $jam_dirawat, 
+        'kd_poli' => $row_pasien->kd_poli, 
+        'kd_dokter' => !empty($row_pasien->kd_dokter)&&$row_pasien->kd_dokter!=""?$row_pasien->kd_dokter:$dpjp_1, 
+        'dpjp1' => $dpjp_1, 
+        'dpjp2' => $dpjp_2, 
+        'dpjp3' => $dpjp_3, 
+        'dpjp4' => $dpjp_4, 
+        'kelas' => $kelas_perawatan, 
+        'kd_bangsal' => $kode_bangsal, 
+        'no_bed' => $no_bed, 
+        'rujuk' => $kode_rujuk, 
+        'kd_asuransi' => $kode_asuransi_ri, 
+        'pulang' => "F"
+    ));   
+$status = true; 
+
+
+/** cek apakah pasien ada di ranap.inap */
+$row_ranap_inap = DB::table('ranap.inap')->where('no_reg', $no_reg)->first();
+if (!empty($row_ranap_inap)) {
+    $row_ranap_inap = (object) $row_ranap_inap; 
+    $tgl_masuk_lama = $row_ranap_inap->tgl_masuk; 
+    $jam_masuk_lama = $row_ranap_inap->jam_masuk;
+    /** update rme.soap_inap */
+    DB::table('rme.soap_inap')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk_lama)
+        ->update(
+            array(
+                'tgl_masuk' => $tgl_masuk,
+                'jam_masuk' => $jam_masuk
+            )
+        ); 
+        
+    /** update rme.askep_inap */
+    DB::table('rme.askep_inap')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk_lama)
+        ->update(
+            array(
+                'tgl_masuk' => $tgl_masuk,
+                'jam_masuk' => $jam_masuk
+            )
+        ); 
+        
+    /** update rme.askep_inap_awal */
+    DB::table('rme.askep_inap_awal')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk_lama)
+        ->update(
+            array(
+                'tgl_masuk' => $tgl_masuk,
+                'jam_masuk' => $jam_masuk
+            )
+        ); 
+        
+    /** update rme.askep_inap_awal tambahan kebidanan */
+    DB::table('rme.askep_inap_tambahan_kebidanan')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk_lama)
+        ->update(
+            array(
+                'tgl_masuk' => $tgl_masuk,
+                'jam_masuk' => $jam_masuk
+            )
+        ); 
+        
+    /** update rme.askep_inap_awal tambahan post partum */
+    DB::table('rme.askep_post_partum')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk_lama)
+        ->update(
+            array(
+                'tgl_masuk' => $tgl_masuk,
+                'jam_masuk' => $jam_masuk
+            )
+        ); 
+        
+    /** update rme.pasien_resep_inap */
+    DB::table('rme.pasien_resep_inap')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk_lama)
+        ->update(
+            array(
+                'tgl_masuk' => $tgl_masuk,
+                'jam_masuk' => $jam_masuk
+            )
+        ); 
+        
+    /** update rme.pasien_resep_inap_beri */
+    DB::table('rme.pasien_resep_inap_beri')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk_lama)
+        ->update(
+            array(
+                'tgl_masuk' => $tgl_masuk,
+                'jam_masuk' => $jam_masuk
+            )
+        ); 
+        
+    /** update rme.askep_inap_tambahan_neonatus */
+    DB::table('rme.askep_inap_tambahan_neonatus')->where('no_reg', $no_reg)->where('tgl_masuk', $tgl_masuk_lama)
+        ->update(
+            array(
+                'tgl_masuk' => $tgl_masuk,
+                'jam_masuk' => $jam_masuk
+            )
+        ); 
+}
+
+/*update data ke dbf*/
+$xdata=array(
+	"sec"=>"sync", 
+	"opt"=>"pasien", 
+	"xht"=>"1",
+	"norm"=>"$no_reg");
+
+$url='http://192.168.0.11/pendaftaran/service.php';
+$data=json_encode($xdata);
+$headers= array('auth:4NN4B3L', 'Content-type: application/json');
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url); 
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_POST, 1); 
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+curl_setopt($ch, CURLOPT_ENCODING, "");
+curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+$xresult = curl_exec($ch);
+curl_close($ch);
+
+$xdata=array(
+	"sec"=>"sync", 
+	"opt"=>"inap", 
+	"xht"=>"1",
+	"norm"=>"$no_reg");
+/**/
+
+$data=json_encode($xdata);
+$headers= array('auth:4NN4B3L', 'Content-type: application/json');
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url); 
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_POST, 1); 
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+curl_setopt($ch, CURLOPT_ENCODING, "");
+curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+$xresult = curl_exec($ch);
+curl_close($ch);
+
+
+$data = array(
+    'no_reg'        => $no_reg,
+    'status'        => $status,
+    'ur_tgl_rs'    => str_replace("-", "", $tgl_masuk).str_replace(":", "", $jam_masuk) 
+);
+echo json_encode($data);

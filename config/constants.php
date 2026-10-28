@@ -1,0 +1,31 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+// define('URL_BRIDGE', 'http://192.168.0.202/bill/service');
+define('URL_BRIDGE', 'http://192.168.0.11/bill/service');
+define('URL_BRIDGE_PENDAFTARAN', 'http://192.168.0.11/pendaftaran/service.php');
+// define('URL_KASIR', 'http://172.16.18.28');
+// define('URL_KASIR', 'http://172.16.17.79/print_nota_bon_rajal.php');
+define('URL_KASIR', 'http://172.16.17.79');
+define('DBF_NO_PERK_GIGI', 'rsik/POLI/GIGI/no_perk.dbf');
+define('SQL_NO_PERK_GIGI', 'gigi_no_perk');
+define('DBF_NO_PERK_SPS', 'rsik/POLI/SPS/no_perk.dbf');
+define('SQL_NO_PERK_SPS', 'sps_no_perk');
+define('DBF_NO_PERK_UMUM', 'rsik/POLI/UMUM/no_perk.dbf');
+define('SQL_NO_PERK_UMUM', 'umum_no_perk');
+define('DBF_DOKTER', 'rsik/DAFTAR/dokter.dbf');
+define('SQL_DOKTER', 'dokter');
+define('DBF_DS_TARIF', 'rsik/PUBLIC/DS_TARIF.DBF');
+define('SQL_DS_TARIF', 'ds_tarif');
+define('DBF_NO_PERK_RHMED', 'rsik/rhmed/no_perk.dbf');
+define('SQL_NO_PERK_RHMED', 'rhmed_no_perk');
+define('DBF_NO_PERK_JANTUNG', 'rsik/pjantung/no_perk.dbf');
+define('SQL_NO_PERK_JANTUNG', 'jantung_no_perk');
+define('DBF_NO_PERK_HD', 'rsik/hd/no_perk.dbf');
+define('SQL_NO_PERK_HD', 'hd_no_perk');
+
+define('URL_BRIDGE_BPJS_VCLAIM', 'http://192.168.0.245/2.0-production/index.php');
+define('URL_BRIDGE_BPJS_ANTREAN', 'http://192.168.0.245/2.0-antrol-production/index.php');
+define('URL_BRIDGE_BPJS_APLICARES', 'http://192.168.0.245/2.0-aplicares-production/index.php');
+define('INACBG_URL', 'http://192.168.0.250/E-Klaim/ws.php');
+define('INACBG_KEY', 'fc16d1f6bdc53a27d0452a2e7f52f15948fa19030d624338faf81628c54b6c75');
+define('ARR_KODE_BPJS', ['300', '301', '302', '303', '304', '305', '306']);
